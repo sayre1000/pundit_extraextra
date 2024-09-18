@@ -1,6 +1,6 @@
 require 'active_support/concern'
 
-module PunditExtra
+module PunditExtraExtra
   module ResourceAutoload
     extend ActiveSupport::Concern
 

@@ -1,4 +1,4 @@
-# PunditExtra
+# PunditExtraExtra
 
 [![Gem Version](https://badge.fury.io/rb/pundit_extra.svg)](https://badge.fury.io/rb/pundit_extra)
 [![Build Status](https://github.com/DannyBen/pundit_extra/workflows/Test/badge.svg)](https://github.com/DannyBen/pundit_extra/actions?query=workflow%3ATest)
@@ -34,7 +34,7 @@ Add to your `ApplicationController`:
 ```ruby
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
-  include PunditExtra
+  include PunditExtraExtra
 end
 ```
 

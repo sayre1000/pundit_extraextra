@@ -1,4 +1,4 @@
-module PunditExtra
+module PunditExtraExtra
   module Helpers
     def self.included(base)
       base.helper_method :can?, :cannot? if base.respond_to? :helper_method

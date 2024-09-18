@@ -1,10 +1,10 @@
-module PunditExtra
+module PunditExtraExtra
   def self.included(_base)
     return unless defined? ActionController::Base
 
     ActionController::Base.class_eval do
-      include PunditExtra::Helpers
-      include PunditExtra::ResourceAutoload
+      include PunditExtraExtra::Helpers
+      include PunditExtraExtra::ResourceAutoload
     end
   end
 end

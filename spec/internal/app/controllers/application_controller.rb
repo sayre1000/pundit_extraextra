@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
-  include PunditExtra
+  include PunditExtraExtra
   include CurrentUserMixin
 
   rescue_from Pundit::NotAuthorizedError, with: :unauthorized

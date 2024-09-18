@@ -112,7 +112,7 @@ module PunditExtra
                    end
       end
 
-      raise ActiveRecord::RecordNotFound if resource.nil?
+      raise ActiveRecord::RecordNotFound, "Couldn't find #{resource_name.to_s.capitalize} with #{resource_id_param} == #{resource_id}"if resource.nil?
 
       if resource.is_a?(ActiveRecord::Relation) || resource.is_a?(Array)
         varname = varname.to_s.pluralize
@@ -159,10 +159,13 @@ module PunditExtra
 
     def update_resource(current_instance, resource_name, resource_id, find_by_attribute, action)
       resource = current_instance.public_send(resource_name.pluralize).find_by(find_by_attribute => resource_id)
-      raise ActiveRecord::RecordNotFound if resource.nil?
+      unless record.nil?
+        authorize resource, "#{action}?"
+        resource.attributes = resource_attributes(resource, action) if resource.respond_to?(:attributes=)
+      else
+        resource = nil
+      end
 
-      authorize resource, "#{action}?"
-      resource.attributes = resource_attributes(resource, action) if resource.respond_to?(:attributes=)
       resource
     end
 
@@ -205,8 +208,6 @@ module PunditExtra
                    load_nested_resource(parent_instances, resource_name, current_instance)
                  end
 
-      raise ActiveRecord::RecordNotFound if resource.nil?
-
       resource
     end
 
@@ -225,20 +226,19 @@ module PunditExtra
         end
       elsif action == 'update'
         resource = scope.find_by(find_by_attribute => resource_id) # Use the custom find_by attribute
-        if resource.nil?
-          raise ActiveRecord::RecordNotFound if resource.nil?
+        unless resource.nil?
+          authorize resource, "#{action}?"
+          resource.attributes = resource_attributes(resource, action)
+          resource = resource
+        else
+          resource = nil
         end
-        authorize resource, "#{action}?"
-        resource.attributes = resource_attributes(resource, action)
-        resource = resource
+      elsif action == 'index'
+        resource = policy_scope(scope) # Treat as collection for index
       elsif resource_id
         resource = scope.find_by(find_by_attribute => resource_id) # Use the custom find_by attribute
       else
-        resource = policy_scope(scope) # Treat as collection for non-standard actions and index
-      end
-
-      if resource.nil?
-        raise ActiveRecord::RecordNotFound if resource.nil?
+        resource = policy_scope(scope) # Treat as collection for non-standard actions
       end
 
       resource

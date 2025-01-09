@@ -205,7 +205,7 @@ module PunditExtraExtra
                  elsif action == 'update'
                    update_resource(current_instance, resource_name, resource_id, find_by_attribute, action)
                  else
-                   load_nested_resource(parent_instances, resource_name, current_instance)
+                   load_index_resource(current_instance, resource_name)
                  end
 
       resource
